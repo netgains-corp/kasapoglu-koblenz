@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasap Oglu Koblenz | Schlüsseldienst & Reparaturen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        kasap: {
+                            primary: '#3b82f6',   /* Helleres Blau für Kontrast auf Braun */
+                            accent: '#facc15',    /* Gold/Gelb */
+                            leather: '#3E2723',   /* Leder Braun Basis */
+                            leatherLight: '#5D4037',
+                            red: '#ef4444',       /* Helles Rot für Notdienst */
+                            dark: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        #bg-image {
+            position: fixed;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
+            filter: brightness(0.3) saturate(0.8) contrast(1.1);
+            transition: all 0.5s ease;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            /* Wärmerer Overlay passend zum Leder */
+            background: radial-gradient(circle at center, rgba(62, 39, 35, 0.2) 0%, rgba(15, 23, 42, 0.9) 100%);
+            z-index: -1;
+        }
+
+        /* CARD STYLE - LEDER OPTIK */
+        .kasap-card {
+            /* Dunkelbraun mit leichter Transparenz */
+            background-color: rgba(45, 25, 20, 0.94); 
+            
+            /* LEDER TEXTUR MUSTER (SVG Noise + Gradient) */
+            background-image: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E"),
+                linear-gradient(160deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0.2) 100%);
+            
+            /* Goldener/Heller Rahmen für Edle Optik */
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            
+            box-shadow: 
+                0 20px 40px -5px rgba(0,0,0,0.6), 
+                0 0 2px rgba(255,255,255,0.1) inset; /* Inner Glow */
+            
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #f3f4f6; /* Immer heller Text auf dunklem Leder */
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Naht-Effekt (Optional, subtil am Rand) */
+        .kasap-card::after {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .dark .kasap-card {
+            /* Im Darkmode evtl. noch etwas dunkler/kühler */
+            background-color: rgba(30, 15, 10, 0.96);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .kasap-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.8);
+            border-color: rgba(250, 204, 21, 0.3); /* Goldener Schimmer bei Hover */
+        }
+
+        /* TEXT STYLES */
+        .text-glow {
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* THEME TOGGLE */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 50;
+            background: rgba(62, 39, 35, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            border-radius: 9999px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            color: #facc15;
+        }
+        .theme-toggle:hover {
+            background: #facc15;
+            color: #3E2723;
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* ACCORDION */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+        }
+        .accordion-btn.active .icon-chevron {
+            transform: rotate(180deg);
+        }
+        
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(to bottom, #8D6E63, #5D4037); 
+            border-radius: 5px; 
+            border: 2px solid transparent;
+            background-clip: content-box;
+        }
+        
+        /* Buttons */
+        .btn-gold {
+            background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+            color: #3E2723;
+            box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #fbbf24 0%, #b45309 100%);
+        }
+        
+        .btn-outline {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #e5e7eb;
+        }
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #facc15;
+            color: #facc15;
+        }
+    </style>
+</head>
+<body class="py-8 px-4 min-h-screen text-gray-100 2xl:text-xl selection:bg-kasap-accent selection:text-kasap-leather">
+    
+    <div id="bg-image"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- Theme Toggle -->
+    <button onclick="toggleDarkMode()" class="theme-toggle" aria-label="Toggle Dark Mode">
+        <i class="fa-solid fa-moon text-xl w-6 h-6 flex items-center justify-center dark:hidden drop-shadow-sm"></i>
+        <i class="fa-solid fa-sun text-xl w-6 h-6 items-center justify-center hidden dark:flex"></i>
+    </button>
+
+    <div class="w-full max-w-md 2xl:max-w-4xl mx-auto space-y-8">
+
+        <!-- 1. HERO / BRANDING -->
+        <header class="kasap-card p-10 sm:p-12 text-center group border-t-8 border-t-kasap-accent">
+            <div class="relative z-10">
+                <div class="inline-block relative mb-6">
+                    <h1 class="text-6xl sm:text-7xl 2xl:text-8xl font-cinzel font-black text-white tracking-wider leading-tight text-glow">
+                        KASAP<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-kasap-accent to-yellow-600 text-5xl sm:text-6xl 2xl:text-7xl font-bold tracking-widest block mt-2 drop-shadow-sm">
+                            OGLU
+                        </span>
+                    </h1>
+                    
+                    <div class="absolute -top-6 -right-8 bg-gradient-to-br from-kasap-primary to-blue-700 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-xl transform rotate-12 border border-white/20">
+                        KOBLENZ
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-3 mb-8 mt-2">
+                    <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-black/30 border border-green-500/50 shadow-md backdrop-blur-md">
+                        <span class="relative flex h-3 w-3 mr-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span class="text-xs font-bold tracking-widest uppercase text-green-400">Geöffnet</span>
+                    </div>
+                    <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-black/30 border border-yellow-500/50 shadow-md backdrop-blur-md">
+                        <i class="fa-solid fa-star text-yellow-500 mr-2 text-xs drop-shadow-sm"></i>
+                        <span class="text-xs font-bold tracking-widest uppercase text-yellow-500">Meisterbetrieb</span>
+                    </div>
+                </div>
+
+                <p class="text-gray-300 text-sm sm:text-base font-medium max-w-md mx-auto leading-relaxed border-t border-white/10 pt-6">
+                    Traditionelles Handwerk & Moderne Technik.<br>
+                    <span class="font-bold text-kasap-accent mt-1 block">Schlüsseldienst • Schuhreparatur • Näharbeiten</span>
+                </p>
+            </div>
+        </header>
+
+        <!-- 2. QUICK ACTIONS & INFO -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <!-- Hours -->
+            <div class="kasap-card p-6 flex flex-col items-center justify-center text-center">
+                <div class="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-4 shadow-inner border border-white/10">
+                    <i class="fa-regular fa-clock text-2xl text-kasap-accent drop-shadow-sm"></i>
+                </div>
+                <h2 class="font-cinzel text-xl font-bold mb-4 text-white text-glow">Öffnungszeiten</h2>
+                <div class="text-sm space-y-2 w-full max-w-[220px]">
+                    <div class="flex justify-between border-b border-white/10 pb-1">
+                        <span class="opacity-70">Mo - Fr</span>
+                        <span class="font-bold text-gray-100">09:00 - 18:00</span>
+                    </div>
+                    <div class="flex justify-between border-b border-white/10 pb-1">
+                        <span class="opacity-70">Samstag</span>
+                        <span class="font-bold text-gray-100">09:00 - 14:00</span>
+                    </div>
+                    <div class="flex justify-between text-kasap-red pt-1 items-center bg-red-900/20 px-2 rounded-lg mt-2 border border-red-500/20">
+                        <span class="opacity-90 font-bold text-xs uppercase text-red-400">Notdienst</span>
+                        <span class="font-black animate-pulse text-red-500">24 Std.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact -->
+            <div class="kasap-card p-6 flex flex-col items-center justify-center text-center">
+                <div class="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-4 shadow-inner border border-white/10">
+                    <i class="fa-solid fa-location-dot text-2xl text-kasap-primary drop-shadow-sm"></i>
+                </div>
+                <h2 class="font-cinzel text-xl font-bold mb-2 text-white text-glow">Standort</h2>
+                <p class="text-sm opacity-70 mb-5 font-medium text-gray-300">Löhr-Center Koblenz<br>1. Obergeschoss (1. OG)</p>
+                <div class="flex gap-3 w-full relative z-10">
+                    <a href="tel:0123456789" class="flex-1 py-3 btn-gold rounded-xl text-sm font-bold transition-all text-center transform hover:-translate-y-1">
+                        <i class="fa-solid fa-phone mr-1 animate-wiggle"></i> Anrufen
+                    </a>
+                    <a href="https://maps.google.com/?q=Löhr-Center+Koblenz" target="_blank" class="flex-1 py-3 btn-outline rounded-xl text-sm font-bold transition-all text-center transform hover:-translate-y-1 hover:shadow-lg">
+                        <i class="fa-solid fa-map mr-1"></i> Karte
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. SORTIMENT / LEISTUNGEN (ACCORDION) -->
+        <section id="leistungen" class="kasap-card p-6 sm:p-10">
+            <h2 class="text-center font-cinzel text-2xl sm:text-3xl text-white mb-2 flex items-center justify-center gap-3 text-glow">
+                <i class="fa-solid fa-tools text-kasap-accent"></i> Unsere Leistungen
+            </h2>
+            <p class="text-center text-xs sm:text-sm opacity-50 mb-8 font-medium tracking-wide uppercase">Klicken Sie für Details</p>
+            
+            <div class="space-y-5 relative z-10">
+
+                <!-- 1. Schlüsseldienst -->
+                <div class="border border-white/10 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 bg-black/20">
+                    <button class="accordion-btn w-full px-6 py-5 flex justify-between items-center text-left hover:bg-white/5 transition-all group">
+                        <div class="flex items-center gap-4">
+                            <span class="w-12 h-12 rounded-full bg-blue-900/40 flex items-center justify-center text-blue-400 border border-blue-500/30 shadow-sm">
+                                <i class="fa-solid fa-key text-xl"></i>
+                            </span>
+                            <span class="font-bold text-lg text-gray-100 group-hover:text-blue-300 transition-colors">Schlüsseldienst</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down icon-chevron transition-transform duration-300 opacity-50 group-hover:opacity-100 text-white"></i>
+                    </button>
+                    <div class="accordion-content bg-black/20">
+                        <div class="p-6 text-sm sm:text-base leading-relaxed text-gray-300 border-t border-white/5">
+                            <p class="mb-4 font-medium text-blue-300">Schnell, preiswert und kompetent.</p>
+                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
+                                <li class="flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5"><i class="fa-solid fa-check text-green-500"></i> Türöffnungen</li>
+                                <li class="flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5"><i class="fa-solid fa-check text-green-500"></i> Ersatzschlüssel sofort</li>
+                                <li class="flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5"><i class="fa-solid fa-check text-green-500"></i> Schließanlagen</li>
+                                <li class="flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5"><i class="fa-solid fa-check text-green-500"></i> Autoschlüssel</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Schuhreparatur -->
+                <div class="border border-white/10 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 bg-black/20">
+                    <button class="accordion-btn w-full px-6 py-5 flex justify-between items-center text-left hover:bg-white/5 transition-all group">
+                        <div class="flex items-center gap-4">
+                            <span class="w-12 h-12 rounded-full bg-yellow-900/40 flex items-center justify-center text-yellow-500 border border-yellow-500/30 shadow-sm">
+                                <i class="fa-solid fa-shoe-prints text-xl"></i>
+                            </span>
+                            <span class="font-bold text-lg text-gray-100 group-hover:text-yellow-400 transition-colors">Schuhreparatur</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down icon-chevron transition-transform duration-300 opacity-50 group-hover:opacity-100 text-white"></i>
+                    </button>
+                    <div class="accordion-content bg-black/20">
+                        <div class="p-6 text-sm sm:text-base leading-relaxed text-gray-300 border-t border-white/5">
+                             <p class="mb-4 font-medium text-yellow-500">Wir geben Ihren Lieblingsschuhen ein zweites Leben.</p>
+                             <div class="flex flex-wrap gap-2 text-xs sm:text-sm">
+                                <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">Neue Absätze</span>
+                                <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">Besohlung</span>
+                                <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">Näharbeiten an Leder</span>
+                                <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">Weiten & Kleben</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Näharbeiten & Sonstiges -->
+                <div class="border border-white/10 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 bg-black/20">
+                    <button class="accordion-btn w-full px-6 py-5 flex justify-between items-center text-left hover:bg-white/5 transition-all group">
+                        <div class="flex items-center gap-4">
+                            <span class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-gray-300 border border-white/20 shadow-sm">
+                                <i class="fa-solid fa-scissors text-xl"></i>
+                            </span>
+                            <span class="font-bold text-lg text-gray-100 group-hover:text-white transition-colors">Näharbeiten & Mehr</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down icon-chevron transition-transform duration-300 opacity-50 group-hover:opacity-100 text-white"></i>
+                    </button>
+                    <div class="accordion-content bg-black/20">
+                        <div class="p-6 text-sm sm:text-base leading-relaxed text-gray-300 border-t border-white/5">
+                            <p class="mb-4 font-medium opacity-80">Professionelle Änderungsschneiderei & Kleinreparaturen.</p>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center bg-white/5 p-2 rounded-lg border border-white/5">
+                                    <span class="flex items-center gap-2"><i class="fa-solid fa-ruler-combined text-gray-500"></i> Hosen kürzen</span>
+                                    <i class="fa-solid fa-check text-xs text-green-500"></i>
+                                </div>
+                                <div class="flex justify-between items-center bg-white/5 p-2 rounded-lg border border-white/5">
+                                    <span class="flex items-center gap-2"><i class="fa-solid fa-pencil text-gray-500"></i> Gravuren & Stempel</span>
+                                    <i class="fa-solid fa-check text-xs text-green-500"></i>
+                                </div>
+                                <div class="flex justify-between items-center bg-white/5 p-2 rounded-lg border border-white/5">
+                                    <span class="flex items-center gap-2"><i class="fa-solid fa-battery-full text-gray-500"></i> Batteriewechsel</span>
+                                    <i class="fa-solid fa-check text-xs text-green-500"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. HIGHLIGHT / LOCATION -->
+        <section class="kasap-card bg-gradient-to-br from-blue-900 to-black text-white p-8 relative overflow-hidden border-none shadow-2xl transform hover:scale-[1.02] transition-transform">
+            <!-- Background Icon -->
+            <div class="absolute -top-10 -right-10 p-4 opacity-10">
+                <i class="fa-solid fa-building text-9xl transform -rotate-12 text-white"></i>
+            </div>
+            
+            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="text-center md:text-left">
+                    <h3 class="font-cinzel text-2xl sm:text-3xl font-bold mb-2 text-kasap-accent drop-shadow-md">Im Löhr-Center Koblenz</h3>
+                    <p class="opacity-80 text-sm sm:text-base max-w-sm text-gray-300">
+                        Sie finden uns zentral im <strong class="text-white">1. Obergeschoss (1. OG)</strong>.<br>
+                        Parkmöglichkeiten direkt im Center-Parkhaus.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="https://maps.google.com/?q=Löhr-Center+Koblenz" target="_blank" class="btn-gold font-bold py-3 px-8 rounded-full shadow-lg transition-all transform hover:scale-105 flex items-center gap-3 text-sm whitespace-nowrap text-kasap-leather">
+                        <i class="fa-solid fa-location-arrow text-xl"></i> 
+                        <span>Route planen</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center text-xs text-gray-400 py-8 font-medium">
+            <div class="inline-block px-6 py-2 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 mb-4">
+                <p class="drop-shadow-md">© 2024 Kasap Oglu Koblenz.</p>
+            </div>
+            <div class="flex justify-center gap-6 text-xl">
+                <a href="#" class="text-gray-400 hover:text-kasap-accent hover:scale-110 transition transform"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-kasap-accent hover:scale-110 transition transform"><i class="fa-brands fa-facebook"></i></a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // Check for saved theme preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // Accordion Logic
+        const accordions = document.querySelectorAll('.accordion-btn');
+
+        accordions.forEach(acc => {
+            acc.addEventListener('click', function() {
+                // Toggle current
+                this.classList.toggle('active');
+                const panel = this.nextElementSibling;
+                
+                // Close others
+                accordions.forEach(otherAcc => {
+                    if (otherAcc !== this && otherAcc.classList.contains('active')) {
+                        otherAcc.classList.remove('active');
+                        otherAcc.nextElementSibling.style.maxHeight = null;
+                    }
+                });
+
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
