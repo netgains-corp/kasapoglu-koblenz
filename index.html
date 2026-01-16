@@ -1,476 +1,207 @@
 <!DOCTYPE html>
-<html lang="de" class="scroll-smooth">
+<html lang="de" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kasapoglu Koblenz | Schlüsseldienst & Reparaturen</title>
+    <title>Vielen Dank! | Der letzte Schritt</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        kasap: {
-                            primary: '#0052cc',   /* Königsblau */
-                            primaryDark: '#003380',
-                            accent: '#FFD700',    /* Signal-Gelb */
-                            red: '#ff4d4d',       /* Helleres Rot */
-                            dark: '#0f172a',
-                            light: '#f8fafc',
-                        }
-                    },
-                    fontFamily: {
-                        header: ['Oswald', 'sans-serif'],
-                        body: ['Open Sans', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Lenis CSS Base -->
     <style>
+        html.lenis, html.lenis body { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+    </style>
+
+    <!-- Custom Styles (Beibehalten vom Original) -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap');
+
+        :root {
+            --theme-color: #22c55e; 
+            --comp-color: #a855f7; 
+            --telegram-color: #229ED9; /* Telegram Blue */
+            --theme-color-shadow: rgba(34, 197, 94, 0.4);
+            --theme-rgb: 34, 197, 94;
+        }
+
         body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: #f1f5f9;
-            color: #334155;
-            overflow-x: hidden;
-        }
-
-        /* ANIMIERTER HINTERGRUND-GRADIENT (Stärker) */
-        .bg-gradient-anim {
-            position: fixed;
-            inset: 0;
-            /* Verlauf: Weiß -> Hellblau -> Silber -> Leichtes Grau */
-            background: linear-gradient(-45deg, #ffffff, #dbeafe, #bfdbfe, #e2e8f0);
-            background-size: 400% 400%;
-            animation: gradientBG 12s ease infinite;
-            z-index: -3;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* HINTERGRUND-MUSTER */
-        .bg-pattern {
-            position: fixed;
-            inset: 0;
-            background-image: radial-gradient(rgba(0, 82, 204, 0.1) 1.5px, transparent 1.5px);
-            background-size: 24px 24px;
-            z-index: -2;
-            pointer-events: none;
-            opacity: 0.5;
-        }
-
-        /* CARD STYLE - GELBER GLOW + HÄRTERER SCHATTEN */
-        .kasap-card {
-            /* Kräftiger Blauer Verlauf */
-            background: linear-gradient(145deg, #0052cc, #003d99);
-            
-            /* Gelbe Umrandung (subtil) + Highlight oben */
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-top: 1px solid rgba(255, 215, 0, 0.6); 
-            
-            /* DER GEWÜNSCHTE EFFEKT: Gelber Glow + Harter schwarzer Schatten */
-            box-shadow: 
-                0 0 25px rgba(255, 215, 0, 0.3), /* Gelber Schein */
-                0 20px 50px -10px rgba(0, 0, 0, 0.8); /* Tiefer schwarzer Schatten */
-            
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            color: white; 
-        }
-        
-        .kasap-card:hover {
-            transform: translateY(-4px);
-            /* Glow wird stärker beim Hover */
-            box-shadow: 
-                0 0 40px rgba(255, 215, 0, 0.6), /* Stärkerer Gelber Schein */
-                0 30px 60px -10px rgba(0, 0, 0, 0.9); /* Noch tieferer Schatten */
-            border-color: #FFD700;
-        }
-
-        /* Hero Card Special */
-        .hero-card {
-            background-image: linear-gradient(to right, rgba(0, 82, 204, 0.92), rgba(0, 61, 153, 0.85)), url('https://images.unsplash.com/photo-1621252179027-94459d27d3ee?q=80&w=1000&auto=format&fit=crop');
+            font-family: 'Outfit', sans-serif;
+            background-color: #020617;
+            background-image: 
+                radial-gradient(circle at 0% 0%, #064e3b 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, #3b0764 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #1e293b 0%, transparent 100%);
+            background-attachment: fixed;
             background-size: cover;
-            background-position: center;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* THEME TOGGLE */
-        .theme-toggle {
+        .animated-bg {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 50;
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 9999px;
-            padding: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            color: #0052cc;
-        }
-        .theme-toggle:hover {
-            background: #FFD700;
-            border-color: #FFD700;
-            color: #003d99;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"),
+                radial-gradient(circle at 20% 30%, rgba(34, 197, 94, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 40%);
+            opacity: 1;
+            pointer-events: none;
         }
 
-        /* ACCORDION */
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-out;
-        }
-        .accordion-btn.active .icon-chevron {
-            transform: rotate(180deg);
-        }
-        .accordion-btn {
-            background-color: rgba(255, 255, 255, 0.05);
-            color: white;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .accordion-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        .accordion-btn.active {
-            background-color: rgba(255, 255, 255, 0.15);
-            border-left: 4px solid #FFD700;
-            color: #FFD700; /* Text wird gelb wenn aktiv */
-        }
-        
-        /* BUTTONS */
-        .btn-primary {
-            background: #FFD700;
-            color: #003380;
-            font-weight: bold;
-            transition: all 0.2s;
-            border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        .btn-primary:hover {
-            background: #ffe033;
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-        }
-        
-        /* LOGO STRIP ANIMATION */
-        .marquee-container {
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        .marquee-content {
-            display: inline-block;
-            animation: marquee 20s linear infinite;
-        }
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        /* Funnel Card Style */
+        .funnel-card {
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
         }
 
-        /* Font Helper */
-        .font-header { font-family: 'Oswald', sans-serif; }
+        /* Dynamic Utilities */
+        .text-theme { color: var(--theme-color); }
+        .bg-theme { background-color: var(--theme-color); }
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff 30%, var(--theme-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-        /* Text Utilities for Blue Background */
-        .text-blue-light { color: #dbeafe; }
+        /* Pulsing Button Animation */
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(34, 158, 217, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(34, 158, 217, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 158, 217, 0); }
+        }
+        .btn-pulse {
+            animation: pulse-glow 2s infinite;
+        }
     </style>
 </head>
-<body class="py-8 px-4 min-h-screen text-slate-800 dark:text-slate-100">
-    
-    <div class="bg-gradient-anim"></div>
-    <div class="bg-pattern"></div>
+<body class="antialiased flex flex-col min-h-screen justify-center">
 
-    <!-- Theme Toggle -->
-    <button onclick="toggleDarkMode()" class="theme-toggle" aria-label="Toggle Dark Mode">
-        <i class="fa-solid fa-moon text-xl w-6 h-6 flex items-center justify-center dark:hidden"></i>
-        <i class="fa-solid fa-sun text-xl w-6 h-6 items-center justify-center hidden dark:flex"></i>
-    </button>
+    <!-- Background -->
+    <div class="animated-bg" id="bg-blob"></div>
 
-    <div class="w-full max-w-md 2xl:max-w-4xl mx-auto space-y-8">
-
-        <!-- 1. HERO SECTION -->
-        <header class="kasap-card hero-card p-10 text-center relative shadow-2xl transform hover:scale-[1.01] transition-transform">
-            <div class="relative z-10">
-                <div class="inline-block mb-4 border-b-4 border-kasap-accent pb-2">
-                    <!-- Adjusted for longer text: Kasapoglu + Schlüsseldienst -->
-                    <h1 class="text-4xl sm:text-6xl font-header font-bold tracking-wide leading-tight text-white drop-shadow-lg" style="text-shadow: 0 4px 10px rgba(0,0,0,0.5);">
-                        KASAPOGLU<br>
-                        <span class="text-kasap-accent text-3xl sm:text-5xl block mt-1">SCHLÜSSELDIENST</span>
-                    </h1>
-                </div>
+    <!-- Main Funnel Content -->
+    <main class="flex-grow flex items-center justify-center px-4 py-12 relative z-10">
+        
+        <div class="max-w-3xl w-full">
+            
+            <!-- Content Card -->
+            <div class="funnel-card rounded-3xl p-6 md:p-8 text-center relative overflow-hidden">
                 
-                <p class="text-blue-100 font-medium text-lg mb-6 max-w-sm mx-auto drop-shadow-md">
-                    Ihr Meisterbetrieb im Löhr-Center Koblenz
+                <!-- Status Badge -->
+                <div class="inline-block bg-green-500/10 text-theme border border-green-500/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6">
+                    <i class="fa-solid fa-check-circle mr-2"></i> Erfolgreich gesendet
+                </div>
+
+                <!-- Headline (Thank You Message) -->
+                <h1 class="text-3xl md:text-5xl font-black text-white mb-4 leading-tight">
+                    Vielen Dank! <br>
+                    <span class="text-gradient"> Der Kauf war erfolgreich. Schaue dir das Video an bevor es weitergeht. </span>
+                </h1>
+
+                <p class="text-base md:text-lg text-slate-300 mb-8 max-w-xl mx-auto leading-relaxed">
+                    Der erste Schritt ist getan. Damit wir dich direkt erreichen können und du keine Neuigkeiten verpasst, ist der Beitritt zur Gruppe wichtig.
                 </p>
 
-                <div class="flex flex-wrap justify-center gap-3 mb-8">
-                    <span class="px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-kasap-accent/50 text-xs font-bold uppercase tracking-wide text-white shadow-lg">
-                        <i class="fa-solid fa-check mr-1 text-kasap-accent"></i> Schlüsseldienst
-                    </span>
-                    <span class="px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-kasap-accent/50 text-xs font-bold uppercase tracking-wide text-white shadow-lg">
-                        <i class="fa-solid fa-check mr-1 text-kasap-accent"></i> Schuhreparatur
-                    </span>
-                    <span class="px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-kasap-accent/50 text-xs font-bold uppercase tracking-wide text-white shadow-lg">
-                        <i class="fa-solid fa-check mr-1 text-kasap-accent"></i> Änderungsschneiderei
-                    </span>
-                </div>
-
-                <div class="flex gap-4 justify-center">
-                    <a href="tel:017672995623" class="btn-primary py-3 px-8 rounded-full flex items-center gap-2">
-                        <i class="fa-solid fa-phone animate-pulse"></i> Anrufen
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Dekorative Elemente im Hintergrund -->
-            <div class="absolute bottom-0 right-0 opacity-10 transform translate-y-1/4 translate-x-1/4">
-                <i class="fa-solid fa-key text-[12rem] text-white"></i>
-            </div>
-        </header>
-
-        <!-- 2. "WARUM WIR" GRID -->
-        <section class="grid grid-cols-3 gap-3 sm:gap-6">
-            <div class="kasap-card p-4 text-center group">
-                <div class="w-12 h-12 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-3 group-hover:bg-kasap-accent group-hover:text-black transition-colors">
-                    <i class="fa-solid fa-bolt text-2xl text-kasap-accent group-hover:text-black"></i>
-                </div>
-                <h3 class="font-header font-bold text-sm sm:text-base text-white">Schnell</h3>
-                <p class="text-xs text-blue-light hidden sm:block opacity-80">Sofort-Service</p>
-            </div>
-            <div class="kasap-card p-4 text-center group">
-                <div class="w-12 h-12 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-3 group-hover:bg-kasap-accent group-hover:text-black transition-colors">
-                    <i class="fa-solid fa-hand-holding-dollar text-2xl text-kasap-accent group-hover:text-black"></i>
-                </div>
-                <h3 class="font-header font-bold text-sm sm:text-base text-white">Fair</h3>
-                <p class="text-xs text-blue-light hidden sm:block opacity-80">Gute Preise</p>
-            </div>
-            <div class="kasap-card p-4 text-center group">
-                <div class="w-12 h-12 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-3 group-hover:bg-kasap-accent group-hover:text-black transition-colors">
-                    <i class="fa-solid fa-certificate text-2xl text-kasap-accent group-hover:text-black"></i>
-                </div>
-                <h3 class="font-header font-bold text-sm sm:text-base text-white">Kompetent</h3>
-                <p class="text-xs text-blue-light hidden sm:block opacity-80">Vom Fachmann</p>
-            </div>
-        </section>
-
-        <!-- 3. INFO CARDS (ZEITEN & ORT) -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <!-- Öffnungszeiten -->
-            <div class="kasap-card p-6 flex flex-col items-center justify-center text-center">
-                <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center text-kasap-accent border border-white/10 shadow-inner mb-3">
-                    <i class="fa-regular fa-clock text-2xl"></i>
-                </div>
-                <div class="w-full flex flex-col items-center"> 
-                    <h2 class="font-header text-lg font-bold text-white mb-2 border-b border-white/20 pb-1 inline-block">Geöffnet</h2>
-                    <div class="text-sm text-blue-100 space-y-1 w-full max-w-[200px]">
-                        <p class="flex justify-between"><span class="opacity-70">Mo-Fr:</span> <strong>09 - 18 Uhr</strong></p>
-                        <p class="flex justify-between"><span class="opacity-70">Sa:</span> <strong>09 - 14 Uhr</strong></p>
+                <!-- VSL (Video Sales Letter) Placeholder -->
+                <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-white/10 mb-8 group cursor-pointer max-w-2xl mx-auto">
+                    <!-- Thumbnail Image -->
+                    <img src="https://images.unsplash.com/photo-1628151015968-3a4429e9ef04?q=80&w=1600&auto=format&fit=crop" 
+                         class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" 
+                         alt="Video Thumbnail">
+                    
+                    <!-- Play Button Overlay -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-16 h-16 bg-theme/90 rounded-full flex items-center justify-center shadow-[0_0_30px_var(--theme-color)] group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-play text-slate-900 text-2xl ml-1"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Fake Player Controls -->
+                    <div class="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-black/80 to-transparent flex items-end px-4 py-2">
+                        <div class="h-0.5 w-full bg-white/30 rounded-full overflow-hidden">
+                            <div class="h-full w-0 bg-red-600"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Standort -->
-            <div class="kasap-card p-6 flex flex-col items-center justify-center text-center">
-                <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center text-kasap-accent border border-white/10 shadow-inner mb-3">
-                    <i class="fa-solid fa-location-dot text-2xl"></i>
-                </div>
-                <div class="w-full flex flex-col items-center">
-                    <h2 class="font-header text-lg font-bold text-white mb-2 border-b border-white/20 pb-1 inline-block">Anfahrt</h2>
-                    <p class="text-sm text-blue-100 mb-4">
-                        Löhr-Center Koblenz<br>
-                        <strong class="text-kasap-accent text-base">1. Obergeschoss (1. OG)</strong>
+                <!-- CTA Section -->
+                <div class="bg-slate-800/50 rounded-2xl p-5 md:p-6 border border-white/5 max-w-2xl mx-auto">
+                    <h3 class="text-lg font-bold text-white mb-2">Dein nächster Schritt:</h3>
+                    
+                    <!-- Telegram Button -->
+                    <a href="https://t.me/deine_gruppe" target="_blank" class="btn-pulse group relative flex items-center justify-center gap-3 w-full md:w-auto md:inline-flex bg-[#229ED9] hover:bg-[#1c86b8] text-white text-lg font-bold py-3 px-8 rounded-xl transition-all shadow-[0_10px_30px_rgba(34,158,217,0.4)] transform hover:-translate-y-1 my-3">
+                        <i class="fa-brands fa-telegram text-2xl"></i>
+                        <span class="tracking-wide">Jetzt der Telegram Gruppe beitreten</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform ml-1 text-sm"></i>
+                    </a>
+                    
+                    <p class="mt-3 text-xs text-slate-500">
+                        100% kostenlos & sicher.
                     </p>
-                    <a href="https://maps.google.com/?q=Löhr-Center+Koblenz" target="_blank" class="text-xs font-bold bg-white/10 hover:bg-kasap-accent hover:text-black transition-colors px-4 py-2 rounded-lg inline-flex items-center border border-white/20">
-                        Route planen <i class="fa-solid fa-arrow-right ml-2"></i>
-                    </a>
                 </div>
-            </div>
-        </section>
 
-        <!-- 4. LEISTUNGEN -->
-        <section class="kasap-card p-6">
-            <h2 class="font-header text-2xl text-white mb-6 border-l-4 border-kasap-accent pl-3 flex items-center gap-2">
-                <i class="fa-solid fa-tools text-kasap-accent text-lg"></i> Unsere Dienstleistungen
-            </h2>
+            </div>
             
-            <div class="space-y-4">
-                <!-- Schlüsseldienst -->
-                <div class="border border-white/20 rounded-xl overflow-hidden bg-black/20">
-                    <button class="accordion-btn w-full px-5 py-4 flex justify-between items-center text-left">
-                        <div class="flex items-center gap-3">
-                            <span class="w-10 h-10 rounded-full bg-white/10 text-kasap-accent flex items-center justify-center text-lg border border-white/10">
-                                <i class="fa-solid fa-key"></i>
-                            </span>
-                            <span class="font-header font-bold text-lg">Schlüsseldienst</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-down icon-chevron opacity-50"></i>
-                    </button>
-                    <div class="accordion-content bg-black/30">
-                        <div class="h-32 w-full bg-gray-800 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover opacity-80" alt="Schlüsselmaschine">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent flex items-end p-4">
-                                <span class="text-kasap-accent text-sm font-bold uppercase tracking-wide">Präzisionsanfertigung</span>
-                            </div>
-                        </div>
-                        <div class="p-5 text-sm text-blue-100">
-                            <ul class="space-y-2">
-                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-kasap-accent"></i> Türöffnungen (schadenfrei)</li>
-                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-kasap-accent"></i> Ersatzschlüssel sofort</li>
-                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-kasap-accent"></i> Schließanlagen</li>
-                            </ul>
-                        </div>
-                    </div>
+            <!-- Trust Badges (Below Fold) -->
+            <div class="flex justify-center gap-8 mt-10 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
+                <div class="text-center">
+                    <i class="fa-solid fa-shield-halved text-2xl mb-1 text-slate-400"></i>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase">Sicher</p>
                 </div>
-
-                <!-- Schuhreparatur -->
-                <div class="border border-white/20 rounded-xl overflow-hidden bg-black/20">
-                    <button class="accordion-btn w-full px-5 py-4 flex justify-between items-center text-left">
-                        <div class="flex items-center gap-3">
-                            <span class="w-10 h-10 rounded-full bg-white/10 text-kasap-accent flex items-center justify-center text-lg border border-white/10">
-                                <i class="fa-solid fa-shoe-prints"></i>
-                            </span>
-                            <span class="font-header font-bold text-lg">Schuhreparatur</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-down icon-chevron opacity-50"></i>
-                    </button>
-                    <div class="accordion-content bg-black/30">
-                        <div class="h-32 w-full bg-gray-800 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1449505278894-297fdb3edbc1?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover opacity-80" alt="Schuster">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent flex items-end p-4">
-                                <span class="text-kasap-accent text-sm font-bold uppercase tracking-wide">Traditionelles Handwerk</span>
-                            </div>
-                        </div>
-                        <div class="p-5 text-sm text-blue-100">
-                            <ul class="space-y-2">
-                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-kasap-accent"></i> Neue Absätze & Sohlen</li>
-                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-kasap-accent"></i> Nähen, Kleben & Weiten</li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="text-center">
+                    <i class="fa-solid fa-bolt text-2xl mb-1 text-slate-400"></i>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase">Schnell</p>
                 </div>
-
-                <!-- Näharbeiten -->
-                <div class="border border-white/20 rounded-xl overflow-hidden bg-black/20">
-                    <button class="accordion-btn w-full px-5 py-4 flex justify-between items-center text-left">
-                        <div class="flex items-center gap-3">
-                            <span class="w-10 h-10 rounded-full bg-white/10 text-kasap-accent flex items-center justify-center text-lg border border-white/10">
-                                <i class="fa-solid fa-scissors"></i>
-                            </span>
-                            <span class="font-header font-bold text-lg">Näharbeiten</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-down icon-chevron opacity-50"></i>
-                    </button>
-                    <div class="accordion-content bg-black/30">
-                        <div class="h-32 w-full bg-gray-800 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1528652258838-898492212903?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover opacity-80" alt="Nähmaschine">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent flex items-end p-4">
-                                <span class="text-kasap-accent text-sm font-bold uppercase tracking-wide">Präzise Änderungen</span>
-                            </div>
-                        </div>
-                        <div class="p-5 text-sm text-blue-100">
-                            <ul class="space-y-2">
-                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-kasap-accent"></i> Hosen kürzen & Reißverschlüsse</li>
-                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-kasap-accent"></i> Gravuren & Batteriewechsel</li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="text-center">
+                    <i class="fa-solid fa-heart text-2xl mb-1 text-slate-400"></i>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase">Persönlich</p>
                 </div>
             </div>
-        </section>
 
-        <!-- 5. KUNDENSTIMMEN -->
-        <section class="kasap-card p-6">
-            <h2 class="font-header text-xl text-white mb-4 text-center">Das sagen unsere Kunden</h2>
-            <div class="flex gap-4 overflow-x-auto pb-4 snap-x">
-                <div class="min-w-[260px] bg-white/10 p-5 rounded-xl border border-white/10 shadow-lg snap-center backdrop-blur-sm">
-                    <div class="flex text-kasap-accent text-xs mb-3">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-sm text-blue-100 italic mb-3 leading-relaxed">"Super schnell geholfen, als ich mich ausgesperrt hatte. Preis war absolut fair!"</p>
-                    <p class="text-xs font-bold text-white uppercase tracking-wider">- Michael S.</p>
-                </div>
-                <div class="min-w-[260px] bg-white/10 p-5 rounded-xl border border-white/10 shadow-lg snap-center backdrop-blur-sm">
-                    <div class="flex text-kasap-accent text-xs mb-3">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-sm text-blue-100 italic mb-3 leading-relaxed">"Habe meine Lieblingsstiefel hier neu besohlen lassen. Sehen aus wie neu."</p>
-                    <p class="text-xs font-bold text-white uppercase tracking-wider">- Sabine K.</p>
-                </div>
-            </div>
-        </section>
+        </div>
+    </main>
 
-        <!-- 6. MARKEN -->
-        <section class="overflow-hidden py-4 opacity-70">
-            <div class="marquee-container">
-                <div class="marquee-content text-slate-500 font-header font-bold text-xl uppercase tracking-widest space-x-8" style="text-shadow: 0 1px 1px rgba(255,255,255,0.5);">
-                    <span>ABUS</span> <span>•</span> <span>Burg Wächter</span> <span>•</span> <span>DOM</span> <span>•</span> <span>BKS</span> <span>•</span> <span>Vibram</span> <span>•</span> <span>Trelock</span> <span>•</span> <span>ABUS</span> <span>•</span> <span>Burg Wächter</span> <span>•</span> <span>DOM</span> <span>•</span> <span>BKS</span>
-                </div>
-            </div>
-        </section>
+    <!-- Simple Footer -->
+    <footer class="py-6 text-center text-slate-700 text-xs relative z-10">
+        <p>&copy; 2025. Alle Rechte vorbehalten.</p>
+        <div class="mt-2 space-x-3">
+            <a href="#" class="hover:text-slate-400 transition-colors">Impressum</a>
+            <a href="#" class="hover:text-slate-400 transition-colors">Datenschutz</a>
+        </div>
+    </footer>
 
-        <!-- FOOTER -->
-        <footer class="text-center text-xs text-slate-500 py-6 border-t border-slate-300">
-            <div class="flex justify-center gap-6 text-xl mb-4">
-                <a href="#" class="text-slate-500 hover:text-kasap-primary transition"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" class="text-slate-500 hover:text-kasap-primary transition"><i class="fa-brands fa-facebook"></i></a>
-                <a href="https://wa.me/49123456789" class="text-slate-500 hover:text-green-600 transition"><i class="fa-brands fa-whatsapp"></i></a>
-            </div>
-            <p>© 2024 Kasap Oglu Koblenz. Alle Rechte vorbehalten.</p>
-        </footer>
-
-    </div>
-
+    <!-- Scripts -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script> 
     <script>
-        // Set Default Theme to Light
-        if (localStorage.theme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-        }
-
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-
-        // Accordion Logic
-        const accordions = document.querySelectorAll('.accordion-btn');
-
-        accordions.forEach(acc => {
-            acc.addEventListener('click', function() {
-                this.classList.toggle('active');
-                const panel = this.nextElementSibling;
-                
-                // Close others
-                accordions.forEach(otherAcc => {
-                    if (otherAcc !== this && otherAcc.classList.contains('active')) {
-                        otherAcc.classList.remove('active');
-                        otherAcc.nextElementSibling.style.maxHeight = null;
-                    }
-                });
-
-                if (panel.style.maxHeight) {
-                    panel.style.maxHeight = null;
-                } else {
-                    panel.style.maxHeight = panel.scrollHeight + "px";
+        document.addEventListener("DOMContentLoaded", function() {
+            // Lenis Smooth Scroll
+            if (typeof Lenis !== 'undefined') {
+                const lenis = new Lenis({
+                    duration: 1.2,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+                    smoothWheel: true
+                })
+                function raf(time) {
+                    lenis.raf(time)
+                    requestAnimationFrame(raf)
                 }
-            });
+                requestAnimationFrame(raf)
+            }
         });
     </script>
 </body>
