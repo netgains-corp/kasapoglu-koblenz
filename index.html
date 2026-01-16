@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vielen Dank! – Anfrage erfolgreich</title>
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS (für Utility-Klassen im Layout) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Icons laden (FontAwesome) -->
@@ -15,9 +15,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    
-    <!-- Calendly CSS -->
-    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
     
     <!-- Buttery Smooth Scrolling (Lenis) -->
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -29,7 +26,7 @@
         :root {
             /* STANDARD: BLAU (Krypto Theme) */
             --primary-color: #38bdf8; /* Sky Blue für Akzente */
-            --accent-color: #f6ad55;  /* Orange für Kontraste */
+            --accent-color: #f6ad55;  /* Orange für Kontraste (z.B. ProvenExpert) */
             --dark-bg: #050505;
             --text-white: #ffffff;
             --text-gray: #cbd5e0;
@@ -39,11 +36,11 @@
             /* Standard Hintergrund-Tönung (BLAU) */
             --overlay-color: rgba(0, 40, 255, 0.85); 
             
-            /* Strategiegespräch Farbe (angelehnt an das Primary Blue oder Gold) */
-            --strategy-color: #00ACF0; 
+            /* Telegram Farbe */
+            --telegram-color: #229ED9;
         }
 
-        /* THEME: ORANGE */
+        /* THEME: ORANGE (Ursprünglich) */
         body.theme-orange { 
             --overlay-color: rgba(246, 173, 85, 0.1); 
             --primary-color: #f6ad55; 
@@ -131,6 +128,7 @@
             line-height: 1.2;
             margin-bottom: 15px;
         }
+        /* Passendere Farbe für blauen Hintergrund: Ein helles Cyan/Weiß */
         .main-headline span { 
             color: var(--primary-color); 
             text-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
@@ -185,33 +183,32 @@
             justify-content: center;
             gap: 12px;
             width: 100%;
-            max-width: 450px;
-            cursor: pointer;
+            max-width: 400px;
         }
         .btn-base:hover {
             transform: scale(1.02);
             filter: brightness(1.1);
         }
 
-        /* Strategie Button Style (Ersetzt Telegram) */
-        .btn-strategy {
-            background-color: var(--strategy-color);
+        /* Telegram Button Style */
+        .btn-telegram {
+            background-color: var(--telegram-color);
             color: #ffffff;
-            border: 2px solid var(--strategy-color);
-            box-shadow: 0 0 20px rgba(0, 172, 240, 0.4);
+            border: 2px solid var(--telegram-color);
+            box-shadow: 0 0 20px rgba(34, 158, 217, 0.4);
         }
-        .btn-strategy:hover {
+        .btn-telegram:hover {
             background-color: transparent;
-            color: var(--strategy-color);
+            color: var(--telegram-color);
         }
 
         /* App Button Style */
         .btn-app {
-            background-color: #10b981; 
+            background-color: #10b981; /* Emerald Green for "Buy/App" */
             color: #ffffff;
             border: 2px solid #10b981;
             box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
-            margin-top: 20px;
+            margin-top: 20px; /* Abstand zum Telegram Button */
         }
         .btn-app:hover {
             background-color: transparent;
@@ -238,37 +235,18 @@
         /* MODAL STYLES */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center;
-            backdrop-filter: blur(8px);
-            opacity: 0; transition: opacity 0.3s ease;
+            background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
         }
-        .modal-overlay.active { display: flex; opacity: 1; }
-        
-        /* Allgemeiner Modal Content */
+        .modal-overlay.active { display: flex; }
         .modal-content {
             background: #1a1a1a; border: 1px solid var(--primary-color); padding: 40px;
-            border-radius: 15px; width: 90%; position: relative;
+            border-radius: 15px; max-width: 600px; width: 90%; position: relative;
             text-align: left; color: var(--text-gray); box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            max-height: 90vh; overflow-y: auto;
-            transform: scale(0.95); transition: transform 0.3s ease;
+            max-height: 85vh; overflow-y: auto;
         }
-        .modal-overlay.active .modal-content { transform: scale(1); }
-
-        /* Spezifisches Calendly Modal (Größer) */
-        .modal-content.calendly-modal {
-            max-width: 1000px; /* Breit für Kalender */
-            padding: 20px;
-            background: #10103D; /* Dunkles Blau aus CI Vorlage */
-            border: 1px solid rgba(0, 172, 240, 0.3);
-        }
-
         .modal-content h3 { color: var(--text-white); font-family: var(--font-heading); margin-bottom: 20px; font-size: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-        
-        .close-modal { 
-            position: absolute; top: 15px; right: 20px; 
-            color: var(--text-gray); font-size: 32px; cursor: pointer; 
-            transition: color 0.3s; line-height: 1; z-index: 50;
-        }
+        .close-modal { position: absolute; top: 15px; right: 20px; color: var(--text-gray); font-size: 32px; cursor: pointer; transition: color 0.3s; line-height: 1; }
         .close-modal:hover { color: var(--primary-color); }
 
         footer {
@@ -282,8 +260,6 @@
         footer a:hover { color: var(--primary-color); }
 
     </style>
-    <!-- Calendly Script -->
-    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </head>
 <body>
 
@@ -301,7 +277,7 @@
         
         <div class="content-box">
             
-            <!-- Status Badge -->
+            <!-- Status Badge (Pill Style) -->
             <div class="sub-headline">
                 <i class="fa-solid fa-check-circle mr-2"></i> Erfolgreich gesendet
             </div>
@@ -313,7 +289,7 @@
             </h1>
 
             <p class="text-body">
-                Der erste Schritt ist getan. Damit wir dich direkt erreichen können und du keine Neuigkeiten verpasst, buche dir jetzt dein persönliches Gespräch.
+                Der erste Schritt ist getan. Damit wir dich direkt erreichen können und du keine Neuigkeiten verpasst, ist der Beitritt zur Gruppe wichtig.
             </p>
 
             <!-- Video Container -->
@@ -328,13 +304,13 @@
             </div>
 
             <div class="flex flex-col items-center">
-                <!-- CTA Button 1: STRATEGIEGESPRÄCH (Ersetzt Telegram) -->
-                <button id="open-calendly" class="btn-base btn-strategy pulse mb-2">
-                    <i class="fa-solid fa-calendar-check text-2xl"></i>
-                    <span>Jetzt 1:1 Gespräch vereinbaren</span>
-                </button>
+                <!-- CTA Button 1: Telegram -->
+                <a href="https://t.me/deine_gruppe" target="_blank" class="btn-base btn-telegram pulse mb-2">
+                    <i class="fa-brands fa-telegram text-2xl"></i>
+                    <span>Jetzt Gruppe beitreten</span>
+                </a>
                 <p class="text-xs text-gray-500 mb-8">
-                    100% kostenlos & unverbindlich.
+                    100% kostenlos & sicher.
                 </p>
 
                 <!-- Divider -->
@@ -378,7 +354,7 @@
 
     <!-- IMPRESSUM MODAL -->
     <div id="impressum-modal" class="modal-overlay">
-        <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-content">
             <span class="close-modal" data-target="impressum-modal">&times;</span>
             <h3>Impressum</h3>
             <p>
@@ -390,16 +366,6 @@
                 Telefon: 0123 456789<br>
                 E-Mail: info@example.com
             </p>
-        </div>
-    </div>
-
-    <!-- CALENDLY MODAL (Neu) -->
-    <div id="calendly-modal" class="modal-overlay">
-        <div class="modal-content calendly-modal">
-            <span class="close-modal" data-target="calendly-modal">&times;</span>
-            <h3 style="text-align: center; border: none; margin-bottom: 10px;">Termin auswählen</h3>
-            <!-- Calendly Inline Widget -->
-            <div class="calendly-inline-widget" data-url="https://calendly.com/f-merzenich/60min" style="min-width:320px;height:700px;"></div>
         </div>
     </div>
 
@@ -420,60 +386,38 @@
                 requestAnimationFrame(raf)
             }
 
-            // 2. Theme Toggle
+            // 2. Theme Toggle (Logik aktualisiert für Standard Blau)
             const toggleBtn = document.getElementById('theme-toggle');
             const body = document.body;
-            let themeState = 0; // 0=Blue, 1=Orange, 2=Red
+            let themeState = 0; // 0=Blue(Default), 1=Orange, 2=Red
 
             toggleBtn.addEventListener('click', () => {
                 themeState = (themeState + 1) % 3;
+                
                 body.classList.remove('theme-orange', 'theme-red');
+                
                 if (themeState === 1) body.classList.add('theme-orange');
                 if (themeState === 2) body.classList.add('theme-red');
             });
 
-            // 3. ProvenExpert Date
+            // 3. ProvenExpert Date Update
             const dateEl = document.getElementById('pe-date-display');
             const now = new Date();
             const dateStr = now.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
             if(dateEl) dateEl.innerText = 'Stand: ' + dateStr;
 
-            // 4. Modal Logic (Impressum & Calendly)
+            // 4. Modal Logic
             const impressumBtn = document.getElementById('open-impressum');
-            const calendlyBtn = document.getElementById('open-calendly');
-            
-            const impressumModal = document.getElementById('impressum-modal');
-            const calendlyModal = document.getElementById('calendly-modal');
-            
-            const closeBtns = document.querySelectorAll('.close-modal');
+            const modal = document.getElementById('impressum-modal');
+            const closeBtn = document.querySelector('.close-modal');
 
-            function openModal(modal) { 
-                modal.classList.add('active'); 
-                document.body.style.overflow = 'hidden'; // Scrollen im Hintergrund verhindern
-            }
-            function closeModal(modal) { 
-                modal.classList.remove('active'); 
-                document.body.style.overflow = ''; 
-            }
+            function openModal() { modal.classList.add('active'); }
+            function closeModal() { modal.classList.remove('active'); }
 
-            if(impressumBtn) impressumBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(impressumModal); });
-            if(calendlyBtn) calendlyBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(calendlyModal); });
-
-            closeBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const targetId = btn.getAttribute('data-target');
-                    const targetModal = document.getElementById(targetId);
-                    if(targetModal) closeModal(targetModal);
-                });
-            });
-
-            // Schließen beim Klick auf Overlay
-            [impressumModal, calendlyModal].forEach(modal => {
-                if(modal) {
-                    modal.addEventListener('click', (e) => {
-                        if (e.target === modal) closeModal(modal);
-                    });
-                }
+            if(impressumBtn) impressumBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
+            if(closeBtn) closeBtn.addEventListener('click', closeModal);
+            if(modal) modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
             });
         });
     </script>
