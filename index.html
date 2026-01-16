@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vielen Dank! – Anfrage erfolgreich</title>
     
-    <!-- Tailwind CSS (für Utility-Klassen im Layout) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Icons laden (FontAwesome) -->
@@ -16,34 +16,44 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     
+    <!-- Calendly CSS -->
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    
     <!-- Buttery Smooth Scrolling (Lenis) -->
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
     <style>
         /* -----------------------------------------------------------
-           BASIS SETUP & VARIABLEN (Aus Vorlage übernommen)
+           BASIS SETUP & VARIABLEN
         ----------------------------------------------------------- */
         :root {
-            --primary-color: #f6ad55; /* Orange */
+            /* STANDARD: BLAU (Krypto Theme) */
+            --primary-color: #38bdf8; /* Sky Blue für Akzente */
+            --accent-color: #f6ad55;  /* Orange für Kontraste */
             --dark-bg: #050505;
             --text-white: #ffffff;
             --text-gray: #cbd5e0;
             --font-heading: 'Montserrat', sans-serif;
             --font-body: 'Poppins', sans-serif;
             
-            /* Standard Hintergrund-Tönung (Orange/Braun) */
-            --overlay-color: rgba(246, 173, 85, 0.1); 
+            /* Standard Hintergrund-Tönung (BLAU) */
+            --overlay-color: rgba(0, 40, 255, 0.85); 
             
-            /* Telegram Farbe (angepasst an Design oder Original) 
-               Hier nutzen wir Primary Orange für Konsistenz, 
-               oder das Original Blue als Akzent. */
-            --telegram-color: #229ED9;
+            /* Strategiegespräch Farbe (angelehnt an das Primary Blue oder Gold) */
+            --strategy-color: #00ACF0; 
         }
 
-        /* THEME: BLAU */
-        body.theme-blue { --overlay-color: rgba(0, 40, 255, 0.85); }
+        /* THEME: ORANGE */
+        body.theme-orange { 
+            --overlay-color: rgba(246, 173, 85, 0.1); 
+            --primary-color: #f6ad55; 
+        }
+        
         /* THEME: ROT */
-        body.theme-red { --overlay-color: rgba(160, 0, 0, 0.85); }
+        body.theme-red { 
+            --overlay-color: rgba(160, 0, 0, 0.85); 
+            --primary-color: #ef4444;
+        }
 
         /* LENIS SCROLL */
         html.lenis { height: auto; }
@@ -121,16 +131,19 @@
             line-height: 1.2;
             margin-bottom: 15px;
         }
-        .main-headline span { color: var(--primary-color); }
+        .main-headline span { 
+            color: var(--primary-color); 
+            text-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+        }
 
         .text-body {
             font-size: 16px; color: var(--text-gray); margin-bottom: 30px;
             max-width: 600px; margin-left: auto; margin-right: auto;
         }
 
-        /* CONTENT BOX (Strategy Box Style) */
+        /* CONTENT BOX */
         .content-box {
-            background: rgba(0, 0, 0, 0.6); /* Etwas dunkler für Lesbarkeit */
+            background: rgba(0, 0, 0, 0.6); 
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 40px 30px;
@@ -145,7 +158,7 @@
         .video-wrapper {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%; /* 16:9 */
             background: #000;
             border-radius: 12px;
             overflow: hidden;
@@ -158,9 +171,7 @@
         }
 
         /* BUTTONS */
-        .btn-main {
-            background-color: var(--telegram-color); /* Jetzt Blau */
-            color: #ffffff;
+        .btn-base {
             font-family: var(--font-heading);
             font-weight: 800;
             font-size: 18px;
@@ -168,21 +179,43 @@
             text-transform: uppercase;
             text-decoration: none;
             border-radius: 50px;
-            border: 2px solid var(--telegram-color); /* Rand auch Blau */
             transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(34, 158, 217, 0.4); /* Blauer Schatten */
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
+            cursor: pointer;
         }
-        .btn-main:hover {
+        .btn-base:hover {
             transform: scale(1.02);
             filter: brightness(1.1);
+        }
+
+        /* Strategie Button Style (Ersetzt Telegram) */
+        .btn-strategy {
+            background-color: var(--strategy-color);
+            color: #ffffff;
+            border: 2px solid var(--strategy-color);
+            box-shadow: 0 0 20px rgba(0, 172, 240, 0.4);
+        }
+        .btn-strategy:hover {
             background-color: transparent;
-            color: var(--telegram-color); /* Text wird Blau beim Hover */
+            color: var(--strategy-color);
+        }
+
+        /* App Button Style */
+        .btn-app {
+            background-color: #10b981; 
+            color: #ffffff;
+            border: 2px solid #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+            margin-top: 20px;
+        }
+        .btn-app:hover {
+            background-color: transparent;
+            color: #10b981;
         }
 
         /* PROVEN EXPERT BADGE */
@@ -191,12 +224,12 @@
             background-color: #ffffff; width: 110px; padding: 10px;
             border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             z-index: 900; text-align: center; font-family: 'Poppins', sans-serif;
-            border-top: 3px solid var(--primary-color);
+            border-top: 3px solid var(--accent-color);
             transition: transform 0.3s ease; cursor: default;
         }
         .proven-expert-badge:hover { transform: translateY(-3px); }
         .pe-logo { font-weight: 700; font-size: 13px; color: #2d3748; margin-bottom: 5px; line-height: 1; }
-        .pe-logo span { color: var(--primary-color); }
+        .pe-logo span { color: var(--accent-color); }
         .pe-stars { color: #fbbf24; font-size: 12px; margin-bottom: 5px; }
         .pe-rating { font-weight: 800; font-size: 20px; color: #2d3748; line-height: 1; margin-bottom: 2px; }
         .pe-subtext { font-size: 10px; color: #718096; line-height: 1.3; }
@@ -205,18 +238,37 @@
         /* MODAL STYLES */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center;
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center;
+            backdrop-filter: blur(8px);
+            opacity: 0; transition: opacity 0.3s ease;
         }
-        .modal-overlay.active { display: flex; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        
+        /* Allgemeiner Modal Content */
         .modal-content {
             background: #1a1a1a; border: 1px solid var(--primary-color); padding: 40px;
-            border-radius: 15px; max-width: 600px; width: 90%; position: relative;
+            border-radius: 15px; width: 90%; position: relative;
             text-align: left; color: var(--text-gray); box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            max-height: 85vh; overflow-y: auto;
+            max-height: 90vh; overflow-y: auto;
+            transform: scale(0.95); transition: transform 0.3s ease;
         }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+
+        /* Spezifisches Calendly Modal (Größer) */
+        .modal-content.calendly-modal {
+            max-width: 1000px; /* Breit für Kalender */
+            padding: 20px;
+            background: #10103D; /* Dunkles Blau aus CI Vorlage */
+            border: 1px solid rgba(0, 172, 240, 0.3);
+        }
+
         .modal-content h3 { color: var(--text-white); font-family: var(--font-heading); margin-bottom: 20px; font-size: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-        .close-modal { position: absolute; top: 15px; right: 20px; color: var(--text-gray); font-size: 32px; cursor: pointer; transition: color 0.3s; line-height: 1; }
+        
+        .close-modal { 
+            position: absolute; top: 15px; right: 20px; 
+            color: var(--text-gray); font-size: 32px; cursor: pointer; 
+            transition: color 0.3s; line-height: 1; z-index: 50;
+        }
         .close-modal:hover { color: var(--primary-color); }
 
         footer {
@@ -230,6 +282,8 @@
         footer a:hover { color: var(--primary-color); }
 
     </style>
+    <!-- Calendly Script -->
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </head>
 <body>
 
@@ -247,7 +301,7 @@
         
         <div class="content-box">
             
-            <!-- Status Badge (Pill Style) -->
+            <!-- Status Badge -->
             <div class="sub-headline">
                 <i class="fa-solid fa-check-circle mr-2"></i> Erfolgreich gesendet
             </div>
@@ -259,7 +313,7 @@
             </h1>
 
             <p class="text-body">
-                Der erste Schritt ist getan. Damit wir dich direkt erreichen können und du keine Neuigkeiten verpasst, ist der Beitritt zur Gruppe wichtig.
+                Der erste Schritt ist getan. Damit wir dich direkt erreichen können und du keine Neuigkeiten verpasst, buche dir jetzt dein persönliches Gespräch.
             </p>
 
             <!-- Video Container -->
@@ -273,15 +327,29 @@
                 </iframe>
             </div>
 
-            <!-- CTA Button -->
-            <a href="https://t.me/deine_gruppe" target="_blank" class="btn-main pulse">
-                <i class="fa-brands fa-telegram text-2xl"></i>
-                <span>Jetzt Gruppe beitreten</span>
-            </a>
-            
-            <p class="mt-4 text-xs text-gray-500">
-                100% kostenlos & sicher.
-            </p>
+            <div class="flex flex-col items-center">
+                <!-- CTA Button 1: STRATEGIEGESPRÄCH (Ersetzt Telegram) -->
+                <button id="open-calendly" class="btn-base btn-strategy pulse mb-2">
+                    <i class="fa-solid fa-calendar-check text-2xl"></i>
+                    <span>Jetzt 1:1 Gespräch vereinbaren</span>
+                </button>
+                <p class="text-xs text-gray-500 mb-8">
+                    100% kostenlos & unverbindlich.
+                </p>
+
+                <!-- Divider -->
+                <div class="w-24 h-1 bg-white/10 rounded-full mb-8"></div>
+
+                <!-- CTA Button 2: App -->
+                <a href="https://deine-app-url.com" target="_blank" class="btn-base btn-app">
+                    <i class="fa-solid fa-mobile-screen-button text-2xl"></i>
+                    <span>Zur Florian Merzenich Krypto App</span>
+                </a>
+                <p class="mt-3 font-bold text-white tracking-wide">
+                    für nur 29,99 €
+                </p>
+                <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-widest">Einmaliges Angebot</p>
+            </div>
 
         </div>
 
@@ -310,7 +378,7 @@
 
     <!-- IMPRESSUM MODAL -->
     <div id="impressum-modal" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 600px;">
             <span class="close-modal" data-target="impressum-modal">&times;</span>
             <h3>Impressum</h3>
             <p>
@@ -322,6 +390,16 @@
                 Telefon: 0123 456789<br>
                 E-Mail: info@example.com
             </p>
+        </div>
+    </div>
+
+    <!-- CALENDLY MODAL (Neu) -->
+    <div id="calendly-modal" class="modal-overlay">
+        <div class="modal-content calendly-modal">
+            <span class="close-modal" data-target="calendly-modal">&times;</span>
+            <h3 style="text-align: center; border: none; margin-bottom: 10px;">Termin auswählen</h3>
+            <!-- Calendly Inline Widget -->
+            <div class="calendly-inline-widget" data-url="https://calendly.com/f-merzenich/60min" style="min-width:320px;height:700px;"></div>
         </div>
     </div>
 
@@ -345,33 +423,57 @@
             // 2. Theme Toggle
             const toggleBtn = document.getElementById('theme-toggle');
             const body = document.body;
-            let themeState = 0; // 0=Default, 1=Blue, 2=Red
+            let themeState = 0; // 0=Blue, 1=Orange, 2=Red
 
             toggleBtn.addEventListener('click', () => {
                 themeState = (themeState + 1) % 3;
-                body.classList.remove('theme-blue', 'theme-red');
-                if (themeState === 1) body.classList.add('theme-blue');
+                body.classList.remove('theme-orange', 'theme-red');
+                if (themeState === 1) body.classList.add('theme-orange');
                 if (themeState === 2) body.classList.add('theme-red');
             });
 
-            // 3. ProvenExpert Date Update
+            // 3. ProvenExpert Date
             const dateEl = document.getElementById('pe-date-display');
             const now = new Date();
             const dateStr = now.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
             if(dateEl) dateEl.innerText = 'Stand: ' + dateStr;
 
-            // 4. Modal Logic
+            // 4. Modal Logic (Impressum & Calendly)
             const impressumBtn = document.getElementById('open-impressum');
-            const modal = document.getElementById('impressum-modal');
-            const closeBtn = document.querySelector('.close-modal');
+            const calendlyBtn = document.getElementById('open-calendly');
+            
+            const impressumModal = document.getElementById('impressum-modal');
+            const calendlyModal = document.getElementById('calendly-modal');
+            
+            const closeBtns = document.querySelectorAll('.close-modal');
 
-            function openModal() { modal.classList.add('active'); }
-            function closeModal() { modal.classList.remove('active'); }
+            function openModal(modal) { 
+                modal.classList.add('active'); 
+                document.body.style.overflow = 'hidden'; // Scrollen im Hintergrund verhindern
+            }
+            function closeModal(modal) { 
+                modal.classList.remove('active'); 
+                document.body.style.overflow = ''; 
+            }
 
-            if(impressumBtn) impressumBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
-            if(closeBtn) closeBtn.addEventListener('click', closeModal);
-            if(modal) modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
+            if(impressumBtn) impressumBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(impressumModal); });
+            if(calendlyBtn) calendlyBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(calendlyModal); });
+
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-target');
+                    const targetModal = document.getElementById(targetId);
+                    if(targetModal) closeModal(targetModal);
+                });
+            });
+
+            // Schließen beim Klick auf Overlay
+            [impressumModal, calendlyModal].forEach(modal => {
+                if(modal) {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) closeModal(modal);
+                    });
+                }
             });
         });
     </script>
