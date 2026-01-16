@@ -1,195 +1,334 @@
 <!DOCTYPE html>
-<html lang="de" class="dark">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vielen Dank! | Der letzte Schritt</title>
+    <title>Vielen Dank! – Anfrage erfolgreich</title>
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS (für Utility-Klassen im Layout) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- FontAwesome -->
+    <!-- Icons laden (FontAwesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts laden: Montserrat & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Buttery Smooth Scrolling (Lenis) -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
-    <!-- Lenis CSS Base -->
     <style>
-        html.lenis, html.lenis body { height: auto; }
+        /* -----------------------------------------------------------
+           BASIS SETUP & VARIABLEN (Aus Vorlage übernommen)
+        ----------------------------------------------------------- */
+        :root {
+            --primary-color: #f6ad55; /* Orange */
+            --dark-bg: #050505;
+            --text-white: #ffffff;
+            --text-gray: #cbd5e0;
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+            
+            /* Standard Hintergrund-Tönung (Orange/Braun) */
+            --overlay-color: rgba(246, 173, 85, 0.1); 
+            
+            /* Telegram Farbe (angepasst an Design oder Original) 
+               Hier nutzen wir Primary Orange für Konsistenz, 
+               oder das Original Blue als Akzent. */
+            --telegram-color: #229ED9;
+        }
+
+        /* THEME: BLAU */
+        body.theme-blue { --overlay-color: rgba(0, 40, 255, 0.85); }
+        /* THEME: ROT */
+        body.theme-red { --overlay-color: rgba(160, 0, 0, 0.85); }
+
+        /* LENIS SCROLL */
+        html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto !important; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
         .lenis.lenis-stopped { overflow: hidden; }
-    </style>
 
-    <!-- Custom Styles (Beibehalten vom Original) -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap');
-
-        :root {
-            --theme-color: #22c55e; 
-            --comp-color: #a855f7; 
-            --telegram-color: #229ED9; /* Telegram Blue */
-            --theme-color-shadow: rgba(34, 197, 94, 0.4);
-            --theme-rgb: 34, 197, 94;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #020617;
-            background-image: 
-                radial-gradient(circle at 0% 0%, #064e3b 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, #3b0764 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, #1e293b 0%, transparent 100%);
-            background-attachment: fixed;
-            background-size: cover;
-            color: #e2e8f0;
+            background-color: var(--dark-bg);
+            color: var(--text-white);
+            font-family: var(--font-body);
+            line-height: 1.5;
             overflow-x: hidden;
+            transition: background-color 0.5s ease;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        .animated-bg {
+        /* HINTERGRUND (Fixed) */
+        .bg-fixed {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: url('https://storage.googleapis.com/msgsndr/H1mibqsfrrRD9o3Cjg0N/media/692493104580ec493c7ca068.jpg') center center / cover no-repeat;
+            opacity: 0.85;
+        }
+
+        /* Farb-Overlay */
+        .bg-tint {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            background: 
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"),
-                radial-gradient(circle at 20% 30%, rgba(34, 197, 94, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 40%);
-            opacity: 1;
+            background-color: var(--overlay-color);
+            mix-blend-mode: overlay;
             pointer-events: none;
+            transition: background-color 0.5s ease;
         }
 
-        /* Funnel Card Style */
-        .funnel-card {
-            background-color: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(20px);
+        /* THEME TOGGLE BUTTON */
+        #theme-toggle {
+            position: fixed; top: 20px; right: 20px; z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-white);
+            padding: 10px; border-radius: 50%; width: 40px; height: 40px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(5px); transition: all 0.3s ease;
+        }
+        #theme-toggle:hover { background: var(--primary-color); transform: scale(1.1); }
+
+        /* CONTAINER & TYPOGRAFIE */
+        .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        .sub-headline {
+            font-family: var(--font-heading);
+            font-size: 13px; font-weight: 600; letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-white);
+            margin-bottom: 20px;
+            border: 2px solid var(--text-white);
+            padding: 6px 16px;
+            display: inline-block;
+            border-radius: 50px;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(4px);
+        }
+
+        .main-headline {
+            font-family: var(--font-heading);
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+        .main-headline span { color: var(--primary-color); }
+
+        .text-body {
+            font-size: 16px; color: var(--text-gray); margin-bottom: 30px;
+            max-width: 600px; margin-left: auto; margin-right: auto;
+        }
+
+        /* CONTENT BOX (Strategy Box Style) */
+        .content-box {
+            background: rgba(0, 0, 0, 0.6); /* Etwas dunkler für Lesbarkeit */
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            padding: 40px 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
         }
 
-        /* Dynamic Utilities */
-        .text-theme { color: var(--theme-color); }
-        .bg-theme { background-color: var(--theme-color); }
-        .text-gradient {
-            background: linear-gradient(to right, #ffffff 30%, var(--theme-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* VIDEO CONTAINER */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .video-wrapper iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         }
 
-        /* Pulsing Button Animation */
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0 rgba(34, 158, 217, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(34, 158, 217, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(34, 158, 217, 0); }
+        /* BUTTONS */
+        .btn-main {
+            background-color: var(--telegram-color); /* Jetzt Blau */
+            color: #ffffff;
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 18px;
+            padding: 15px 35px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 50px;
+            border: 2px solid var(--telegram-color); /* Rand auch Blau */
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(34, 158, 217, 0.4); /* Blauer Schatten */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 400px;
         }
-        .btn-pulse {
-            animation: pulse-glow 2s infinite;
+        .btn-main:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+            background-color: transparent;
+            color: var(--telegram-color); /* Text wird Blau beim Hover */
         }
+
+        /* PROVEN EXPERT BADGE */
+        .proven-expert-badge {
+            position: fixed; bottom: 20px; right: 20px;
+            background-color: #ffffff; width: 110px; padding: 10px;
+            border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 900; text-align: center; font-family: 'Poppins', sans-serif;
+            border-top: 3px solid var(--primary-color);
+            transition: transform 0.3s ease; cursor: default;
+        }
+        .proven-expert-badge:hover { transform: translateY(-3px); }
+        .pe-logo { font-weight: 700; font-size: 13px; color: #2d3748; margin-bottom: 5px; line-height: 1; }
+        .pe-logo span { color: var(--primary-color); }
+        .pe-stars { color: #fbbf24; font-size: 12px; margin-bottom: 5px; }
+        .pe-rating { font-weight: 800; font-size: 20px; color: #2d3748; line-height: 1; margin-bottom: 2px; }
+        .pe-subtext { font-size: 10px; color: #718096; line-height: 1.3; }
+        .pe-date { font-size: 9px; color: #a0aec0; margin-top: 5px; border-top: 1px solid #edf2f7; padding-top: 5px; }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: #1a1a1a; border: 1px solid var(--primary-color); padding: 40px;
+            border-radius: 15px; max-width: 600px; width: 90%; position: relative;
+            text-align: left; color: var(--text-gray); box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            max-height: 85vh; overflow-y: auto;
+        }
+        .modal-content h3 { color: var(--text-white); font-family: var(--font-heading); margin-bottom: 20px; font-size: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .close-modal { position: absolute; top: 15px; right: 20px; color: var(--text-gray); font-size: 32px; cursor: pointer; transition: color 0.3s; line-height: 1; }
+        .close-modal:hover { color: var(--primary-color); }
+
+        footer {
+            margin-top: auto;
+            padding: 40px 0;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+        }
+        footer a { color: rgba(255,255,255,0.6); text-decoration: none; margin: 0 10px; transition: color 0.3s; }
+        footer a:hover { color: var(--primary-color); }
+
     </style>
 </head>
-<body class="antialiased flex flex-col min-h-screen justify-center">
+<body>
 
-    <!-- Background -->
-    <div class="animated-bg" id="bg-blob"></div>
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" aria-label="Hintergrundfarbe ändern">
+        <i class="fa-solid fa-palette"></i>
+    </button>
 
-    <!-- Main Funnel Content -->
-    <main class="flex-grow flex items-center justify-center px-4 py-12 relative z-10">
+    <!-- Hintergrund Overlay & Tint -->
+    <div class="bg-fixed"></div>
+    <div class="bg-tint"></div>
+
+    <!-- Main Content -->
+    <main class="container pt-12 pb-20 flex-grow flex items-center justify-center">
         
-        <div class="max-w-3xl w-full">
+        <div class="content-box">
             
-            <!-- Content Card -->
-            <div class="funnel-card rounded-3xl p-6 md:p-8 text-center relative overflow-hidden">
-                
-                <!-- Status Badge -->
-                <div class="inline-block bg-green-500/10 text-theme border border-green-500/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6">
-                    <i class="fa-solid fa-check-circle mr-2"></i> Erfolgreich gesendet
-                </div>
-
-                <!-- Headline (Thank You Message) -->
-                <h1 class="text-3xl md:text-5xl font-black text-white mb-4 leading-tight">
-                    Vielen Dank! <br>
-                    <span class="text-gradient"> Der Kauf war erfolgreich. Schaue dir das Video an bevor es weitergeht. </span>
-                </h1>
-
-                <p class="text-base md:text-lg text-slate-300 mb-8 max-w-xl mx-auto leading-relaxed">
-                    Der erste Schritt ist getan. Damit wir dich direkt erreichen können und du keine Neuigkeiten verpasst, ist der Beitritt zur Gruppe wichtig.
-                </p>
-
-                <!-- VSL (Video Sales Letter) Placeholder -->
-                <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-white/10 mb-8 group cursor-pointer max-w-2xl mx-auto">
-                    <!-- Thumbnail Image -->
-                    <img src="https://images.unsplash.com/photo-1628151015968-3a4429e9ef04?q=80&w=1600&auto=format&fit=crop" 
-                         class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" 
-                         alt="Video Thumbnail">
-                    
-                    <!-- Play Button Overlay -->
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-16 h-16 bg-theme/90 rounded-full flex items-center justify-center shadow-[0_0_30px_var(--theme-color)] group-hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-play text-slate-900 text-2xl ml-1"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Fake Player Controls -->
-                    <div class="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-black/80 to-transparent flex items-end px-4 py-2">
-                        <div class="h-0.5 w-full bg-white/30 rounded-full overflow-hidden">
-                            <div class="h-full w-0 bg-red-600"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CTA Section -->
-                <div class="bg-slate-800/50 rounded-2xl p-5 md:p-6 border border-white/5 max-w-2xl mx-auto">
-                    <h3 class="text-lg font-bold text-white mb-2">Dein nächster Schritt:</h3>
-                    
-                    <!-- Telegram Button -->
-                    <a href="https://t.me/deine_gruppe" target="_blank" class="btn-pulse group relative flex items-center justify-center gap-3 w-full md:w-auto md:inline-flex bg-[#229ED9] hover:bg-[#1c86b8] text-white text-lg font-bold py-3 px-8 rounded-xl transition-all shadow-[0_10px_30px_rgba(34,158,217,0.4)] transform hover:-translate-y-1 my-3">
-                        <i class="fa-brands fa-telegram text-2xl"></i>
-                        <span class="tracking-wide">Jetzt der Telegram Gruppe beitreten</span>
-                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform ml-1 text-sm"></i>
-                    </a>
-                    
-                    <p class="mt-3 text-xs text-slate-500">
-                        100% kostenlos & sicher.
-                    </p>
-                </div>
-
+            <!-- Status Badge (Pill Style) -->
+            <div class="sub-headline">
+                <i class="fa-solid fa-check-circle mr-2"></i> Erfolgreich gesendet
             </div>
+
+            <!-- Headline -->
+            <h1 class="main-headline">
+                Vielen Dank!<br>
+                <span>Deine Anfrage ist eingegangen.</span>
+            </h1>
+
+            <p class="text-body">
+                Der erste Schritt ist getan. Damit wir dich direkt erreichen können und du keine Neuigkeiten verpasst, ist der Beitritt zur Gruppe wichtig.
+            </p>
+
+            <!-- Video Container -->
+            <div class="video-wrapper">
+                <iframe 
+                    src="https://player.vimeo.com/video/1155095594?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0" 
+                    frameborder="0" 
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write" 
+                    title="Vimeo Video"
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <!-- CTA Button -->
+            <a href="https://t.me/deine_gruppe" target="_blank" class="btn-main pulse">
+                <i class="fa-brands fa-telegram text-2xl"></i>
+                <span>Jetzt Gruppe beitreten</span>
+            </a>
             
-            <!-- Trust Badges (Below Fold) -->
-            <div class="flex justify-center gap-8 mt-10 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
-                <div class="text-center">
-                    <i class="fa-solid fa-shield-halved text-2xl mb-1 text-slate-400"></i>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase">Sicher</p>
-                </div>
-                <div class="text-center">
-                    <i class="fa-solid fa-bolt text-2xl mb-1 text-slate-400"></i>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase">Schnell</p>
-                </div>
-                <div class="text-center">
-                    <i class="fa-solid fa-heart text-2xl mb-1 text-slate-400"></i>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase">Persönlich</p>
-                </div>
-            </div>
+            <p class="mt-4 text-xs text-gray-500">
+                100% kostenlos & sicher.
+            </p>
 
         </div>
+
     </main>
 
-    <!-- Simple Footer -->
-    <footer class="py-6 text-center text-slate-700 text-xs relative z-10">
-        <p>&copy; 2025. Alle Rechte vorbehalten.</p>
-        <div class="mt-2 space-x-3">
-            <a href="#" class="hover:text-slate-400 transition-colors">Impressum</a>
-            <a href="#" class="hover:text-slate-400 transition-colors">Datenschutz</a>
+    <!-- PROVEN EXPERT WIDGET -->
+    <div class="proven-expert-badge">
+        <div class="pe-logo">Proven<span>Expert</span></div>
+        <div class="pe-rating">5.00</div>
+        <div class="pe-stars">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+        </div>
+        <div class="pe-subtext">SEHR GUT</div>
+        <div class="pe-subtext">50 Bewertungen</div>
+        <div class="pe-date" id="pe-date-display">Stand: ...</div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="mb-2">&copy; 2025. Alle Rechte vorbehalten.</p>
+        <div>
+            <a href="#" id="open-impressum">Impressum</a>
+            <a href="#">Datenschutz</a>
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script> 
+    <!-- IMPRESSUM MODAL -->
+    <div id="impressum-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" data-target="impressum-modal">&times;</span>
+            <h3>Impressum</h3>
+            <p>
+                <strong>Dein Name / Firma</strong><br>
+                Musterstraße 1<br>
+                12345 Musterstadt
+            </p>
+            <p>
+                Telefon: 0123 456789<br>
+                E-Mail: info@example.com
+            </p>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Lenis Smooth Scroll
+            // 1. Lenis Smooth Scroll
             if (typeof Lenis !== 'undefined') {
                 const lenis = new Lenis({
                     duration: 1.2,
@@ -202,6 +341,38 @@
                 }
                 requestAnimationFrame(raf)
             }
+
+            // 2. Theme Toggle
+            const toggleBtn = document.getElementById('theme-toggle');
+            const body = document.body;
+            let themeState = 0; // 0=Default, 1=Blue, 2=Red
+
+            toggleBtn.addEventListener('click', () => {
+                themeState = (themeState + 1) % 3;
+                body.classList.remove('theme-blue', 'theme-red');
+                if (themeState === 1) body.classList.add('theme-blue');
+                if (themeState === 2) body.classList.add('theme-red');
+            });
+
+            // 3. ProvenExpert Date Update
+            const dateEl = document.getElementById('pe-date-display');
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            if(dateEl) dateEl.innerText = 'Stand: ' + dateStr;
+
+            // 4. Modal Logic
+            const impressumBtn = document.getElementById('open-impressum');
+            const modal = document.getElementById('impressum-modal');
+            const closeBtn = document.querySelector('.close-modal');
+
+            function openModal() { modal.classList.add('active'); }
+            function closeModal() { modal.classList.remove('active'); }
+
+            if(impressumBtn) impressumBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
+            if(closeBtn) closeBtn.addEventListener('click', closeModal);
+            if(modal) modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
         });
     </script>
 </body>
